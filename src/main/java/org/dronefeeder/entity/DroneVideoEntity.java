@@ -1,10 +1,10 @@
 package org.dronefeeder.entity;
 
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 @Entity
 public class DroneVideoEntity extends PanacheEntityBase {
@@ -13,6 +13,8 @@ public class DroneVideoEntity extends PanacheEntityBase {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String url;
+
+  private String nome;
 
   public Long getId() {
     return id;
@@ -30,4 +32,11 @@ public class DroneVideoEntity extends PanacheEntityBase {
     this.url = url;
   }
 
+  public String getNome() {
+    return nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 }

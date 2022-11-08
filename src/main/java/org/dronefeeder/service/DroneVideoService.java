@@ -15,6 +15,7 @@ public class DroneVideoService {
   public void salvar(DroneVideoDto dto) {
     DroneVideoEntity droneVideo = new DroneVideoEntity();
     droneVideo.setUrl(dto.getUrl());
+    droneVideo.setNome(dto.getNome());
     droneVideo.persist();
   }
 

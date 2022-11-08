@@ -1,5 +1,6 @@
 package org.dronefeeder.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
@@ -35,13 +36,17 @@ public class EntregaService {
         this.drone.listar().stream().filter(drone -> !drone.isOcupado())
             .findAny().orElseThrow();
 
-    entrega.setDataEHora(dto.getDataEHora());
+    entrega.setDataEHora(LocalDateTime.now());
     entrega.setDestinatario(dto.getDestinatario());
     entrega.setDroneEntity(droneEntidade);
     entrega.setEndereco(dto.getEndereco());
-    entrega.setStatusEntrega(dto.getStatusEntrega());
+    entrega.setStatusEntrega("Em separação");
     entrega.persist();
+
     droneEntidade.entregas.add(entrega);
+    droneEntidade.setEntregaAtual("Endereço: " + dto.getEndereco() + " "
+        + "Destinatario: " + dto.getDestinatario());
+    droneEntidade.setOcupado(true);
     droneEntidade.persist();
   }
 
@@ -51,9 +56,11 @@ public class EntregaService {
     try {
 
       EntregaEntity entrega = EntregaEntity.findById(id);
+
       if (EntregaEntity.findById(id) == null) {
         throw new EntidadeNaoEncontradaException();
       }
+
       entrega.setDestinatario(dto.getDestinatario());
       entrega.setDroneEntity(this.drone.listar().stream()
           .filter(drone -> !drone.isOcupado()).findAny().orElseThrow());
@@ -75,6 +82,8 @@ public class EntregaService {
       }
       if (entrega != null) {
         entrega.droneEntity.entregas.remove(entrega);
+        entrega.droneEntity.setOcupado(false);
+        entrega.droneEntity.setEntregaAtual("");
         entrega.delete();
       }
       EntregaEntity.deleteById(id);
