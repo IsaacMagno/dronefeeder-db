@@ -54,4 +54,8 @@ public class DroneEntity extends PanacheEntityBase {
     this.entregas = entregas;
   }
 
+  public long getId() {
+    return id;
+  }
+
 }
